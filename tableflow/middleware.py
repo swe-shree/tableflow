@@ -1,40 +1,35 @@
-# tableflow/middleware.py
+def smart_search(data, value=None, page=1, limit=10, sort_by=None, sort_order="asc"):
+    value = str(value).lower() if value else None
 
-def log(message: str):
-    print(f"[MIDDLEWARE] {message}")
+    # 1️⃣ FILTER / SEARCH
+    results = []
+    for item in data:
+        if value:
+            match = False
+            for v in item.values():
+                if value in str(v).lower():
+                    match = True
+                    break
+            if match:
+                results.append(item)
+        else:
+            results.append(item)
 
+    # 2️⃣ SORTING
+    if sort_by:
+        results.sort(
+            key=lambda x: x.get(sort_by),
+            reverse=(sort_order == "desc")
+        )
 
-def auth_check(user: str):
-    return user == "admin"
-
-
-# ----------------------------
-# FILTERING
-# ----------------------------
-def filter_data(data, key: str, value):
-    """
-    Filters list of dictionaries based on key-value match
-    """
-    return [item for item in data if str(item.get(key)) == str(value)]
-
-
-# ----------------------------
-# SORTING
-# ----------------------------
-def sort_data(data, key: str, reverse: bool = False):
-    """
-    Sorts list of dictionaries by given key
-    """
-    return sorted(data, key=lambda x: x.get(key), reverse=reverse)
-
-
-# ----------------------------
-# PAGINATION
-# ----------------------------
-def paginate_data(data, page: int = 1, limit: int = 10):
-    """
-    Returns paginated results
-    """
+    # 3️⃣ PAGINATION
     start = (page - 1) * limit
     end = start + limit
-    return data[start:end]
+    paginated = results[start:end]
+
+    return {
+        "total": len(results),
+        "page": page,
+        "limit": limit,
+        "data": paginated
+    }
