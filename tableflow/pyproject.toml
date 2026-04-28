@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tableflow"
-version = "0.1.0"
-description = "Smart middleware for search, filtering, pagination"
+version = "1.0.0"
+description = "SaaS-ready middleware engine for search, filtering, pagination"
 authors = [{name="swe-shree"}]
 
 dependencies = []
