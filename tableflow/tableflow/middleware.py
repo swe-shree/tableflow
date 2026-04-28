@@ -1,31 +1,28 @@
 # tableflow/middleware.py
 
-class TableFlow:
-    def __init__(self, data):
-        self.data = data
-        self.result = data
+def smart_search(data, value):
+    """
+    Universal search:
+    - matches id (exact)
+    - matches name/role (partial)
+    - case insensitive
+    """
 
-    # ---------------- FILTER ----------------
-    def filter(self, **kwargs):
-        for key, value in kwargs.items():
-            self.result = [
-                item for item in self.result
-                if str(item.get(key, "")).lower() == str(value).lower()
-            ]
-        return self
+    value = str(value).lower()
+    results = []
 
-    # ---------------- SORT ----------------
-    def sort(self, key, reverse=False):
-        self.result = sorted(self.result, key=lambda x: x.get(key), reverse=reverse)
-        return self
+    for item in data:
 
-    # ---------------- PAGINATION ----------------
-    def paginate(self, page=1, limit=10):
-        start = (page - 1) * limit
-        end = start + limit
-        self.result = self.result[start:end]
-        return self
+        for key, val in item.items():
 
-    # ---------------- OUTPUT ----------------
-    def run(self):
-        return self.result
+            # 1. ID exact match
+            if key == "id" and str(val) == value:
+                results.append(item)
+                break
+
+            # 2. Name/Role/Text partial match
+            if value in str(val).lower():
+                results.append(item)
+                break
+
+    return results
