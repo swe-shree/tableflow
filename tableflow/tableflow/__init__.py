@@ -1,1 +1,2 @@
-from .middleware import TableFlow
+
+from .middleware import smart_search
