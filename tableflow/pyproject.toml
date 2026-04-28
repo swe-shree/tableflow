@@ -1,11 +1,11 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "tableflow"
 version = "0.1.0"
-dependencies = ["typer"]
+description = "Smart middleware for search, filtering, pagination"
+authors = [{name="swe-shree"}]
 
-[build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
-
-[project.scripts]
-tableflow = "tableflow.cli:app"
+dependencies = []
