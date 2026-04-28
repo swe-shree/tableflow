@@ -1,10 +1,8 @@
-# tableflow/middleware.py
-
 def smart_search(data, value):
     """
-    Universal search:
-    - matches id (exact)
-    - matches name/role (partial)
+    Universal search across ALL fields:
+    - id, name, role, email, phone, etc.
+    - partial + exact match
     - case insensitive
     """
 
@@ -12,17 +10,16 @@ def smart_search(data, value):
     results = []
 
     for item in data:
+        matched = False  # prevents duplicate entries
 
-        for key, val in item.items():
+        for val in item.values():
 
-            # 1. ID exact match
-            if key == "id" and str(val) == value:
-                results.append(item)
-                break
-
-            # 2. Name/Role/Text partial match
+            # convert everything to string and compare
             if value in str(val).lower():
-                results.append(item)
+                matched = True
                 break
+
+        if matched:
+            results.append(item)
 
     return results
